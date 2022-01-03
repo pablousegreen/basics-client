@@ -1,0 +1,28 @@
+<form >
+    <input type="text" name="name" id="name" placeholder="name">
+    <input type="text" name="dept" id="dept" placeholder="dept">
+    <input type="text" name="salary" id="salary" placeholder="salary">
+    <a href="#" id="sendData" value="Send" style="background-color: blue; color: aliceblue;">Send data</a>
+</form>
+
+<script>
+    document.querySelector('#sendData').addEventListener('click', (e)=>{
+        e.preventDefault();
+        var url = 'http://localhost:9001/publish-message';
+        //var name = document.querySelector("div.user-panel.main input[name='name']");
+        var name = document.querySelector("input[name='name']");
+        var dept = document.querySelector("input[name='dept']");
+        var salary = document.querySelector("input[name='salary']");
+        var data = `"message": { "body": [ {"name": ${name}", "dept": ${dept}, "salary": ${parseFloat(salary)}}] }`;
+        console.log(data);
+        fetch(url, {
+            method: 'POST',
+            body: JSON.stringify(data), 
+            headers:{
+                'Content-Type': 'application/json'
+            }
+        }).then(res => res.json())
+        .catch(error => console.error('Error:', error))
+        .then(response => console.log('Success:', response));
+    });
+</script>
